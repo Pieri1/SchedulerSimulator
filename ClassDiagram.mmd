@@ -1,0 +1,145 @@
+classDiagram
+    namespace Model {
+        class Process {
+            -Int id
+            -Int color
+            -Int startTime
+            -Int duration
+            -Int priority
+            -List~Event~ eventList
+            -boolean isCompleted
+            -Int runTime
+            -Int waitTime
+        }
+        class Event {
+        }
+        class Scheduler {
+            <<interface>>
+            +nextProcess(List~Process~ queue, Int currentTime)
+            +addProcess(Process p)
+            +removeProcess(Process p)
+            +getReadyQueue(): List~Process~
+        }
+        class FIFO {
+            +nextProcess(List~Process~ queue, Int currentTime)
+        }
+        class SRTF {
+            +nextProcess(List~Process~ queue, Int currentTime)
+        }
+        class PRIOP {
+            +nextProcess(List~Process~ queue, Int currentTime)
+
+        }
+        class SystemClock {
+            -Int currentTime
+            +getCurrentTime(): Int
+            +tick()
+            +reset()
+        }
+        class ConfigParser {
+            +parseConfig(String path): SimulationConfig
+        }
+        class SimulationConfig {
+            -algorithmName: String
+            -quantum: Int
+            -processList: List~Process~
+        }
+        class GanttChart {
+            +updateChart(Int currentTime, Process p)
+            +generateImage(String path)
+        }
+    }
+
+    namespace Control {
+        class SimController {
+            -scheduler: Scheduler
+            -clock: SystemClock
+            -processList: List~Process~
+            -mode: SimulationMode // ENUM: STEP, AUTO
+            +startSimulation()
+            +stepSimulation()
+            +stopSimulation()
+            +loadConfig(SimulationConfig config)
+        }
+    }
+
+    namespace View {
+        class UIConfigurator {
+            +selectAlgorithm()
+            +setQuantum()
+            +loadFile()
+            +startUIRunner()
+        }
+        class UIRunner {
+            +displayCurrentState()
+            +updateGanttChart()
+            +controlStep()
+        }
+        class UIResult {
+            +showSummary()
+            +exportReport()
+        }
+    }
+
+    Scheduler <|.. FIFO
+    Scheduler <|.. SRTF
+    Scheduler <|.. PRIOP
+    Process "1" *-- "*" Event
+    SimulationConfig "1" *-- "*" Process
+    ConfigParser --> SimulationConfig : "Gera"
+    SimController --> SystemClock
+    SimController --> Scheduler
+    SimController --> SimulationConfig
+    UIConfigurator --> SimController : "inicia simulação"
+    UIRunner --> SimController : "executa simulação no modo especificado"
+    UIRunner --> GanttChart : "atualiza gráfico de Gantt"
+    UIResult --> GanttChart : "exibe resultado final e salva em arquivo"
+
+    note for Process "Deve possuir no mínimo os seguintes atributos:
+    - id
+    - cor
+    - ingresso
+    - duracao
+    - prioridade
+    - lista_eventos (Aparentemente futuramente será utilizado)
+    "
+
+    note for Event "Atributos e métodos serão criados posteriormente"
+
+    note for SystemClock "Pode possuir uma função 'subscribe' para que outras classes possam se inscrever para receber ticks do relógio."
+
+    note "Requisitos Gerais:
+    () Software que simula execução de um SO multitarefa preemptivo de tempo compartilhado.
+    -    Deve possuir visualização gráfica em tempo de execução.
+    - O software deve ser configurável e controlável.
+    - Não deve utilizar bibliotecas externas a linguagem escolhida.
+    - Código deve ser legível e bem documentado.
+    Requisitos Projeto A:
+    - Deve incluir relógio global, simulada na forma de ticks de relógio.
+    - Possui apenas uma CPU/Core.
+    - As informações de cada tarefa devem ser armazenadas em uma estrutura só de Task Control Block.
+    - A simulação deve seguir características de tempo especificadas em cada tarefa.
+    - Deve possibilitar execução passo a passo com inspenção de informações e estados.
+    - Deve possibilitar execução completa onde só o resultado final é apresentado.
+    - O software deve permitir a visualização gráfica da execução como gráfico de gantt.
+    - Cada tarefa deve possuir uma cor, passada por parâmetro, apenas colorida quando em execução.
+    - A atualização do gráfico deve ser compativel como o modo de exibição.
+    - Ao fim da simulação deve ser gerado uma imagem com o gráfico (JPG,PNG,SVG, etc...)
+    - A configuração pré-execução deve permitir configurar:
+    -   - Conjunto de tarefas.
+    -   - Características individuais de cada tarefa.
+    -   - Algoritmo de escalonamento.
+    -   - Eventos (Aparentemente futuramente será utilizado).
+    - O software deve permitir configurações padrão.
+    - A configuração deve ser carregada a partir de um arquivo .txt no seguinte formato:
+    -   - algoritmo_escalonamento;quantum (Primeira linha; configurações gerais)
+    -   - id;cor;ingresso;duracao;prioridade;lista_eventos (Demais linhas; configurações de cada processos)
+    - Eventos serão implementados futuramente, porém o sistema deverá ser compatível.
+    - Os seguintes algoritmos devem ser implementados:
+    -   - FIFO (First In First Out)
+    -   - SRTF (Shortest Remaining Time First)
+    -   - PrioP (Prioridade Preemptivo)
+    - Os algoritmos do escalonador devem ser flexíveis para futuras implemetações.
+    - O escalonador idealmente é apenas uma função que retorna a proxima tarefa a ser executada.
+    - A interface de interação deve ser intuitiva.
+    "
