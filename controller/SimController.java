@@ -10,15 +10,18 @@ public class SimController {
     private final GanttChart ganttChart;
 
     private model.Process currentProcess;
-    private String lastProcessId;
-    private int lastStartTime;
+    private int currentStartTime;
+    private String currentProcessId;
+    private boolean wasIdle;
 
     public SimController(SystemClock clock, SimulationConfig config) {
         this.clock = clock;
         this.config = config;
         this.ganttChart = new GanttChart();
-        this.lastProcessId = null;
-        this.lastStartTime = 0;
+        this.currentProcess = null;
+        this.currentStartTime = 0;
+        this.currentProcessId = null;
+        this.wasIdle = true; // Começa com CPU idle
 
         // Select scheduler dynamically based on config
         String algorithm = config.getAlgorithmName().toUpperCase(Locale.ROOT);
@@ -45,63 +48,92 @@ public class SimController {
     private void onTick() {
         int time = clock.getCurrentTime();
         model.Process previousProcess = currentProcess;
+        String previousProcessId = currentProcessId;
+        
+        // Get next process from scheduler
         currentProcess = scheduler.nextProcess(config.getProcessList(), time);
+        currentProcessId = (currentProcess != null) ? currentProcess.getId() : "IDLE";
 
-        // Get process IDs for Gantt chart
-        String previousProcessId = (previousProcess != null) ? previousProcess.getId() : null;
-        String currentProcessId = (currentProcess != null) ? currentProcess.getId() : null;
+        System.out.printf("[t=%d] Scheduler selected: %s -> %s%n", 
+                         time, previousProcessId, currentProcessId);
 
-        // Detect process change and record in Gantt chart
-        if (previousProcessId != null && !previousProcessId.equals(currentProcessId)) {
+        // Detect process changes and record in Gantt chart
+        boolean processChanged = !currentProcessId.equals(previousProcessId != null ? previousProcessId : "IDLE");
+        
+        if (processChanged && previousProcessId != null && !previousProcessId.equals("IDLE")) {
             // Process changed, record the previous process execution
-            ganttChart.addCustomEvent(previousProcessId, lastStartTime, time, "running");
-            lastStartTime = time;
-        } else if (previousProcessId == null && currentProcessId != null) {
-            // Started first process
-            lastStartTime = time;
+            ganttChart.recordExecution(previousProcessId, currentStartTime, time);
+            System.out.printf("  -> Process change: %s finished at %d%n", previousProcessId, time);
+        }
+        
+        if (processChanged && !currentProcessId.equals("IDLE")) {
+            // Start recording new process
+            currentStartTime = time;
+            System.out.printf("  -> Process start: %s at %d%n", currentProcessId, time);
         }
 
         // Execute current process
-        if (currentProcess != null) {
+        if (currentProcess != null && !currentProcessId.equals("IDLE")) {
             currentProcess.executeTick();
-            System.out.printf("[t=%d] Running %s (runtime=%d/%d)%n",
+            System.out.printf("[t=%d] Running %s (runtime=%d/%d, completed=%s)%n",
                     time, currentProcess.getId(),
-                    currentProcess.getRunTime(), currentProcess.getDuration());
+                    currentProcess.getRunTime(), currentProcess.getDuration(),
+                    currentProcess.isCompleted());
             
-            // Check if process completed
+            // Check if process completed during this tick
             if (currentProcess.isCompleted()) {
-                ganttChart.addCustomEvent(currentProcessId, lastStartTime, time + 1, "terminated");
-                lastStartTime = time + 1;
+                ganttChart.recordExecution(currentProcessId, currentStartTime, time + 1);
+                System.out.printf("  -> Process completed: %s at %d%n", currentProcessId, time + 1);
                 currentProcess = null;
+                currentProcessId = "IDLE";
+                currentStartTime = time + 1;
             }
         } else {
             System.out.printf("[t=%d] CPU Idle%n", time);
+            currentProcessId = "IDLE";
         }
-
-        lastProcessId = currentProcessId;
     }
 
     public void start() {
         System.out.println("Simulation starting using " + scheduler.getName() + " scheduler...");
-        lastStartTime = 0;
+        System.out.println("Processes in simulation:");
+        for (model.Process p : config.getProcessList()) {
+            System.out.println("  " + p);
+        }
+        
+        currentStartTime = 0;
         clock.start(true);
     }
 
     public void stop() {
         int finalTime = clock.getCurrentTime();
-        
-        // Record any remaining process execution
-        if (lastProcessId != null && currentProcess != null && !currentProcess.isCompleted()) {
-            ganttChart.addCustomEvent(lastProcessId, lastStartTime, finalTime, "running");
-        }
-        
         clock.stop();
         
+        // Record any final execution
+        if (currentProcessId != null && !currentProcessId.equals("IDLE")) {
+            ganttChart.recordExecution(currentProcessId, currentStartTime, finalTime);
+            System.out.printf("Final recording: %s from %d to %d%n", 
+                            currentProcessId, currentStartTime, finalTime);
+        }
+        
         // Generate Gantt chart
-        ganttChart.generateGanttChart("simulation_gantt.svg");
+        ganttChart.generateChart("simulation_gantt.svg");
         
         System.out.println("Simulation stopped at t=" + finalTime);
         System.out.println("Gantt chart generated: simulation_gantt.svg");
+        
+        // Show recorded events
+        System.out.println("Events recorded:");
+        for (GanttChart.GanttEvent event : ganttChart.getEvents()) {
+            System.out.println("  " + event);
+        }
+        
+        // Show process completion status
+        System.out.println("Process completion status:");
+        for (model.Process p : config.getProcessList()) {
+            System.out.printf("  %s: runtime=%d/%d, completed=%s%n", 
+                            p.getId(), p.getRunTime(), p.getDuration(), p.isCompleted());
+        }
     }
 
     public SystemClock getClock() {
