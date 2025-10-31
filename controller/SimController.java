@@ -7,8 +7,11 @@ public class SimController {
     private final SystemClock clock;
     private final SimulationConfig config;
     private final Scheduler scheduler;
+    private final GanttChart ganttChart;
 
     private model.Process currentProcess;
+    private String lastProcessId;
+    private int lastStartTime;
     private int quantumCounter = 0;
     // accessed from the clock tick thread and from main — make volatile for visibility
     private volatile boolean finished = false;
@@ -16,6 +19,9 @@ public class SimController {
     public SimController(SystemClock clock, SimulationConfig config) {
         this.clock = clock;
         this.config = config;
+        this.ganttChart = new GanttChart();
+        this.lastProcessId = null;
+        this.lastStartTime = 0;
 
         // Algoritmo selecionado via config
         String algorithm = config.getAlgorithmName().toUpperCase(Locale.ROOT);
@@ -41,46 +47,63 @@ public class SimController {
 
     private void onTick() {
         // Para cada tick, seleciona o proximo processo e executa um tick nele.
-        int time = clock.getCurrentTime();
-        
-        // Verifica se precisa trocar o processo atual
+        int time = clock.getCurrentTime();      
+      
+        // Verifica se é necessária troca de processo
         if (currentProcess == null ||
             currentProcess.isCompleted() ||
             quantumCounter >= config.getQuantum()) {
 
-            model.Process previous = currentProcess;
-
-            // Solicita novo processo ao escalonador e reseta o contador de quantum
+            model.Process previousProcess = currentProcess;
             currentProcess = scheduler.nextProcess(config.getProcessList(), time);
             quantumCounter = 0;
 
-            // Log de troca de contexto
-            if (previous != currentProcess) {
-                System.out.printf("[t=%02d] Troca → %s%n",
+            // IDs para Gantt
+            String previousProcessId = (previousProcess != null) ? previousProcess.getId() : null;
+            String currentProcessId = (currentProcess != null) ? currentProcess.getId() : null;
+
+            // Detecta troca de processo
+            if (previousProcessId != null && !previousProcessId.equals(currentProcessId)) {
+                ganttChart.addCustomEvent(previousProcessId, lastStartTime, time, "running");
+                lastStartTime = time;
+            } else if (previousProcessId == null && currentProcessId != null) {
+                lastStartTime = time;
+            }
+
+            // Faz o log da troca
+            if (previousProcess != currentProcess) {
+                System.out.printf("[t=%02d] Context switch → %s%n",
                         time, currentProcess != null ? currentProcess.getId() : "CPU Idle");
             }
+
+            lastProcessId = currentProcessId;
         }
 
-        // Percorre todos os processos
+        // Atualiza o processo executado e os em espera
         for (model.Process p : config.getProcessList()) {
-            // Se o processo não iniciou ou já terminou, ignora
             if (p.getStartTime() > time || p.isCompleted()) continue;
-            // Se for o processo atual, executa
+
             if (p == currentProcess) {
                 p.executeTick();
-            // Se não espera
             } else {
                 p.waitTick();
             }
         }
 
-        // Apenas log
+        // Atualiza o Quantum e log
         if (currentProcess != null) {
             quantumCounter++;
             System.out.printf("[t=%02d] Running %-4s (runtime=%d/%d, q=%d/%d)%n",
-                time, currentProcess.getId(),
-                currentProcess.getRunTime(), currentProcess.getDuration(),
-                quantumCounter, config.getQuantum());
+                    time, currentProcess.getId(),
+                    currentProcess.getRunTime(), currentProcess.getDuration(),
+                    quantumCounter, config.getQuantum());
+
+            // Se terminou agora, registra no Gantt
+            if (currentProcess.isCompleted()) {
+                ganttChart.addCustomEvent(currentProcess.getId(), lastStartTime, time + 1, "terminated");
+                lastStartTime = time + 1;
+                currentProcess = null;
+            }
         } else {
             System.out.printf("[t=%02d] CPU Idle%n", time);
         }
@@ -92,18 +115,29 @@ public class SimController {
             finished = true;
             stop();
         }
+
+        lastProcessId = currentProcessId;
     }
 
     public void start() {
         // Inicia a simulação
         System.out.println("Simulação iniciando com o escalonador " + scheduler.getName() + "...");
+        lastStartTime = 0;
         clock.start();
     }
 
     public void stop() {
-        // Encerra a simulação
+        int finalTime = clock.getCurrentTime();
+      
+        if (lastProcessId != null && currentProcess != null && !currentProcess.isCompleted()) {
+            ganttChart.addCustomEvent(lastProcessId, lastStartTime, finalTime, "running");
+        }
+        
+        // Encerra a simulação e gera Gantt
         clock.stop();
+        ganttChart.generateGanttChart("simulation_gantt.svg");
         System.out.println("Simulação encerrada em t=" + clock.getCurrentTime());
+        System.out.println("Gantt gerado: simulation_gantt.svg");
     }
 
     public void step() {
@@ -121,6 +155,8 @@ public class SimController {
         return clock.getCurrentTime();
     }
 
+    public GanttChart getGanttChart() {
+        return ganttChart;
     /**
      * Indicates whether the simulation has finished. Safe to call from other threads.
      */
