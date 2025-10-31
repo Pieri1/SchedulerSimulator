@@ -21,28 +21,26 @@ public class SystemClock {
         this.listeners = new ArrayList<>();
     }
 
-    public synchronized void start(boolean realtime) {
+    public synchronized void start() {
         // Se já estiver rodando, ignora
         if (running) {
             return;
         }
         running = true;
-        // Se for em tempo real, cria thread para ticks periódicos
-        if (realtime) {
-            tickThread = new Thread(() -> {
-                while (running) {
-                    try {
-                        Thread.sleep(tickIntervalMs);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                    if (!running) break;
-                    tick();
+        // cria thread para ticks periódicos
+        tickThread = new Thread(() -> {
+            while (running) {
+                try {
+                    Thread.sleep(tickIntervalMs);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
-            }, "Clock-Tick-Thread");
-            tickThread.setDaemon(true);
-            tickThread.start();
-        }
+                if (!running) break;
+                tick();
+            }
+        }, "Clock-Tick-Thread");
+        tickThread.setDaemon(true);
+        tickThread.start();
     }
 
     public synchronized void stop() {
@@ -77,6 +75,7 @@ public class SystemClock {
             try {
                 listener.run();
             } catch (Throwable t) {
+                t.printStackTrace();
             }
         }
     }

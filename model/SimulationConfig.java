@@ -7,6 +7,7 @@ public class SimulationConfig {
     // Configurações globais da simulação e lista de processos
     private String algorithmName;
     private int quantum;
+    private int runMode = 1; // 0 = step-by-step, 1 = automático
     private final List<Process> processList;
 
     public SimulationConfig() {
@@ -19,6 +20,9 @@ public class SimulationConfig {
 
     public int getQuantum() { return quantum; }
     public void setQuantum(int quantum) { this.quantum = quantum; }
+
+    public int getRunMode() { return runMode; }
+    public void setRunMode(int runMode) { this.runMode = runMode; }
 
     public List<Process> getProcessList() { return processList; }
 }
