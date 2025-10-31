@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Process {
+    // Atributos de processo
     private String id;
     private int color;
     private int startTime;
     private int duration;
     private int priority;
 
+    // Atributos de estado de processo
     private boolean isCompleted;
     private int runTime;
     private int waitTime;
@@ -17,6 +19,7 @@ public class Process {
     private List<Event> eventList;
     private String state; // "NEW", "READY", "RUNNING", "WAITING", "TERMINATED"
 
+    // Instanciador
     public Process() {
         this.eventList = new ArrayList<>();
         this.state = "NEW";
@@ -25,7 +28,7 @@ public class Process {
         this.waitTime = 0;
     }
 
-    // --- Getters & Setters ---
+    // Getters e Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -56,7 +59,7 @@ public class Process {
     public String getState() { return state; }
     public void setState(String state) { this.state = state; }
 
-    // --- Behavioral methods ---
+    // Roda um tick de execução
     public void executeTick() {
         if (!isCompleted) {
             runTime++;
@@ -69,6 +72,7 @@ public class Process {
         }
     }
 
+    // Roda um tick de espera
     public void waitTick() {
         if (!isCompleted) {
             waitTime++;
@@ -76,6 +80,7 @@ public class Process {
         }
     }
 
+    // Reseta o processo
     public void reset() {
         runTime = 0;
         waitTime = 0;

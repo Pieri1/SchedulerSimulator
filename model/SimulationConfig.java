@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimulationConfig {
+    // Configurações globais da simulação e lista de processos
     private String algorithmName;
     private int quantum;
     private final List<Process> processList;
@@ -12,6 +13,7 @@ public class SimulationConfig {
         this.processList = new ArrayList<>();
     }
 
+    // Getters e Setters
     public String getAlgorithmName() { return algorithmName; }
     public void setAlgorithmName(String algorithmName) { this.algorithmName = algorithmName; }
 
