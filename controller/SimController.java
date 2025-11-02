@@ -167,6 +167,7 @@ public class SimController {
     public static void main(String[] args) throws Exception {
         // Cria o parser e carrega configuração
         ConfigParser parser = new ConfigParser();
+        view.UIConfigurator.main(args);
         SimulationConfig config = parser.parse("config/test.txt");
 
         // Inicia o controlador de simulação a depender do modo de execução
