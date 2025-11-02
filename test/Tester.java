@@ -8,7 +8,7 @@ public class Tester {
         System.out.println("=== BASIC CLOCK TEST ===");
         SystemClock clock = new SystemClock(300); // 300ms between ticks
         clock.addListener(() -> System.out.println("Tick: " + clock.getCurrentTime()));
-        clock.start(true);
+        clock.start();
         Thread.sleep(1500);
         clock.stop();
         System.out.println("Clock stopped at: " + clock.getCurrentTime());

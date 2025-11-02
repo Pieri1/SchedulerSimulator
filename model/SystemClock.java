@@ -21,33 +21,35 @@ public class SystemClock {
         this.listeners = new ArrayList<>();
     }
 
-    public synchronized void start(boolean realtime) {
+    public synchronized void start() {
+        // Se já estiver rodando, ignora
         if (running) {
             return;
         }
         running = true;
-        if (realtime) {
-            tickThread = new Thread(() -> {
-                while (running) {
-                    try {
-                        Thread.sleep(tickIntervalMs);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                    if (!running) break;
-                    tick();
+        // cria thread para ticks periódicos
+        tickThread = new Thread(() -> {
+            while (running) {
+                try {
+                    Thread.sleep(tickIntervalMs);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
-            }, "Clock-Tick-Thread");
-            tickThread.setDaemon(true);
-            tickThread.start();
-        }
+                if (!running) break;
+                tick();
+            }
+        }, "Clock-Tick-Thread");
+        tickThread.setDaemon(true);
+        tickThread.start();
     }
 
     public synchronized void stop() {
+        // Se já estiver parado, ignora
         if (!running) {
             return;
         }
         running = false;
+        // Interrompe a thread
         if (tickThread != null) {
             tickThread.interrupt();
             try {
@@ -63,6 +65,7 @@ public class SystemClock {
     public void tick() {
         currentTime++;
 
+        // Notifica os listeners
         List<Runnable> snapshot;
         synchronized (listeners) {
             snapshot = new ArrayList<>(listeners);
@@ -72,19 +75,23 @@ public class SystemClock {
             try {
                 listener.run();
             } catch (Throwable t) {
+                t.printStackTrace();
             }
         }
     }
 
     public synchronized void reset() {
+        // Reseta o clock
         currentTime = 0;
     }
 
     public int getCurrentTime() {
+        // Getter do tempo atual
         return currentTime;
     }
 
     public void addListener(Runnable listener) {
+        // Adiciona um listener pra lista
         if (listener == null) return;
         synchronized (listeners) {
             listeners.add(listener);
@@ -92,6 +99,7 @@ public class SystemClock {
     }
 
     public void removeListener(Runnable listener) {
+        // Remove um listener da lista
         if (listener == null) return;
         synchronized (listeners) {
             listeners.remove(listener);
@@ -99,6 +107,7 @@ public class SystemClock {
     }
 
     public boolean isRunning() {
+        // Getter do estado
         return running;
     }
 }
