@@ -1,7 +1,6 @@
 package view;
 
 import controller.SimController;
-import model.Process;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
