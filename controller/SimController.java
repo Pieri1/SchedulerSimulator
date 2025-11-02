@@ -149,6 +149,9 @@ public class SimController {
     }
 
     public static void main(String[] args) throws Exception {
+        view.UIConfigurator.main(args);
+
+        /* 
         ConfigParser parser = new ConfigParser();
         SimulationConfig config = parser.parse("config/test.txt");
 
@@ -156,5 +159,6 @@ public class SimController {
         controller.start();
         Thread.sleep(4000);
         controller.stop();
+        */
     }
 }

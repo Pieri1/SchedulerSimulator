@@ -2,44 +2,299 @@
 <svg width="1000" height="400" xmlns="http://www.w3.org/2000/svg">
 <rect width="100%" height="100%" fill="white"/>
 <text x="500" y="30" text-anchor="middle" font-size="18" font-weight="bold">Gráfico de Gantt - Escalonamento</text>
-<text x="70" y="99" text-anchor="end" font-size="12">P1</text>
-<text x="70" y="139" text-anchor="end" font-size="12">P2</text>
-<text x="70" y="179" text-anchor="end" font-size="12">P3</text>
-<line x1="80" y1="80" x2="80" y2="200" stroke="#ccc" stroke-width="1"/>
+<text x="70" y="99" text-anchor="end" font-size="12">t01</text>
+<line x1="80" y1="80" x2="80" y2="120" stroke="#ccc" stroke-width="1"/>
 <text x="80" y="70" text-anchor="middle" font-size="10">0</text>
-<line x1="164" y1="80" x2="164" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="164" y="70" text-anchor="middle" font-size="10">1</text>
-<line x1="248" y1="80" x2="248" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="248" y="70" text-anchor="middle" font-size="10">2</text>
-<line x1="332" y1="80" x2="332" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="332" y="70" text-anchor="middle" font-size="10">3</text>
-<line x1="416" y1="80" x2="416" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="416" y="70" text-anchor="middle" font-size="10">4</text>
-<line x1="500" y1="80" x2="500" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="500" y="70" text-anchor="middle" font-size="10">5</text>
-<line x1="584" y1="80" x2="584" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="584" y="70" text-anchor="middle" font-size="10">6</text>
-<line x1="668" y1="80" x2="668" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="668" y="70" text-anchor="middle" font-size="10">7</text>
-<line x1="752" y1="80" x2="752" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="752" y="70" text-anchor="middle" font-size="10">8</text>
-<line x1="836" y1="80" x2="836" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="836" y="70" text-anchor="middle" font-size="10">9</text>
-<line x1="920" y1="80" x2="920" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="920" y="70" text-anchor="middle" font-size="10">10</text>
+<line x1="91" y1="80" x2="91" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="91" y="70" text-anchor="middle" font-size="10">1</text>
+<line x1="102" y1="80" x2="102" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="102" y="70" text-anchor="middle" font-size="10">2</text>
+<line x1="114" y1="80" x2="114" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="114" y="70" text-anchor="middle" font-size="10">3</text>
+<line x1="125" y1="80" x2="125" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="125" y="70" text-anchor="middle" font-size="10">4</text>
+<line x1="136" y1="80" x2="136" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="136" y="70" text-anchor="middle" font-size="10">5</text>
+<line x1="148" y1="80" x2="148" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="148" y="70" text-anchor="middle" font-size="10">6</text>
+<line x1="159" y1="80" x2="159" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="159" y="70" text-anchor="middle" font-size="10">7</text>
+<line x1="170" y1="80" x2="170" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="170" y="70" text-anchor="middle" font-size="10">8</text>
+<line x1="182" y1="80" x2="182" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="182" y="70" text-anchor="middle" font-size="10">9</text>
+<line x1="193" y1="80" x2="193" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="193" y="70" text-anchor="middle" font-size="10">10</text>
+<line x1="204" y1="80" x2="204" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="204" y="70" text-anchor="middle" font-size="10">11</text>
+<line x1="216" y1="80" x2="216" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="216" y="70" text-anchor="middle" font-size="10">12</text>
+<line x1="227" y1="80" x2="227" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="227" y="70" text-anchor="middle" font-size="10">13</text>
+<line x1="238" y1="80" x2="238" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="238" y="70" text-anchor="middle" font-size="10">14</text>
+<line x1="250" y1="80" x2="250" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="250" y="70" text-anchor="middle" font-size="10">15</text>
+<line x1="261" y1="80" x2="261" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="261" y="70" text-anchor="middle" font-size="10">16</text>
+<line x1="272" y1="80" x2="272" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="272" y="70" text-anchor="middle" font-size="10">17</text>
+<line x1="284" y1="80" x2="284" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="284" y="70" text-anchor="middle" font-size="10">18</text>
+<line x1="295" y1="80" x2="295" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="295" y="70" text-anchor="middle" font-size="10">19</text>
+<line x1="307" y1="80" x2="307" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="307" y="70" text-anchor="middle" font-size="10">20</text>
+<line x1="318" y1="80" x2="318" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="318" y="70" text-anchor="middle" font-size="10">21</text>
+<line x1="329" y1="80" x2="329" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="329" y="70" text-anchor="middle" font-size="10">22</text>
+<line x1="341" y1="80" x2="341" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="341" y="70" text-anchor="middle" font-size="10">23</text>
+<line x1="352" y1="80" x2="352" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="352" y="70" text-anchor="middle" font-size="10">24</text>
+<line x1="363" y1="80" x2="363" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="363" y="70" text-anchor="middle" font-size="10">25</text>
+<line x1="375" y1="80" x2="375" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="375" y="70" text-anchor="middle" font-size="10">26</text>
+<line x1="386" y1="80" x2="386" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="386" y="70" text-anchor="middle" font-size="10">27</text>
+<line x1="397" y1="80" x2="397" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="397" y="70" text-anchor="middle" font-size="10">28</text>
+<line x1="409" y1="80" x2="409" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="409" y="70" text-anchor="middle" font-size="10">29</text>
+<line x1="420" y1="80" x2="420" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="420" y="70" text-anchor="middle" font-size="10">30</text>
+<line x1="431" y1="80" x2="431" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="431" y="70" text-anchor="middle" font-size="10">31</text>
+<line x1="443" y1="80" x2="443" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="443" y="70" text-anchor="middle" font-size="10">32</text>
+<line x1="454" y1="80" x2="454" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="454" y="70" text-anchor="middle" font-size="10">33</text>
+<line x1="465" y1="80" x2="465" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="465" y="70" text-anchor="middle" font-size="10">34</text>
+<line x1="477" y1="80" x2="477" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="477" y="70" text-anchor="middle" font-size="10">35</text>
+<line x1="488" y1="80" x2="488" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="488" y="70" text-anchor="middle" font-size="10">36</text>
+<line x1="500" y1="80" x2="500" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="500" y="70" text-anchor="middle" font-size="10">37</text>
+<line x1="511" y1="80" x2="511" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="511" y="70" text-anchor="middle" font-size="10">38</text>
+<line x1="522" y1="80" x2="522" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="522" y="70" text-anchor="middle" font-size="10">39</text>
+<line x1="534" y1="80" x2="534" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="534" y="70" text-anchor="middle" font-size="10">40</text>
+<line x1="545" y1="80" x2="545" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="545" y="70" text-anchor="middle" font-size="10">41</text>
+<line x1="556" y1="80" x2="556" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="556" y="70" text-anchor="middle" font-size="10">42</text>
+<line x1="568" y1="80" x2="568" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="568" y="70" text-anchor="middle" font-size="10">43</text>
+<line x1="579" y1="80" x2="579" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="579" y="70" text-anchor="middle" font-size="10">44</text>
+<line x1="590" y1="80" x2="590" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="590" y="70" text-anchor="middle" font-size="10">45</text>
+<line x1="602" y1="80" x2="602" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="602" y="70" text-anchor="middle" font-size="10">46</text>
+<line x1="613" y1="80" x2="613" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="613" y="70" text-anchor="middle" font-size="10">47</text>
+<line x1="624" y1="80" x2="624" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="624" y="70" text-anchor="middle" font-size="10">48</text>
+<line x1="636" y1="80" x2="636" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="636" y="70" text-anchor="middle" font-size="10">49</text>
+<line x1="647" y1="80" x2="647" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="647" y="70" text-anchor="middle" font-size="10">50</text>
+<line x1="658" y1="80" x2="658" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="658" y="70" text-anchor="middle" font-size="10">51</text>
+<line x1="670" y1="80" x2="670" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="670" y="70" text-anchor="middle" font-size="10">52</text>
+<line x1="681" y1="80" x2="681" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="681" y="70" text-anchor="middle" font-size="10">53</text>
+<line x1="692" y1="80" x2="692" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="692" y="70" text-anchor="middle" font-size="10">54</text>
+<line x1="704" y1="80" x2="704" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="704" y="70" text-anchor="middle" font-size="10">55</text>
+<line x1="715" y1="80" x2="715" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="715" y="70" text-anchor="middle" font-size="10">56</text>
+<line x1="727" y1="80" x2="727" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="727" y="70" text-anchor="middle" font-size="10">57</text>
+<line x1="738" y1="80" x2="738" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="738" y="70" text-anchor="middle" font-size="10">58</text>
+<line x1="749" y1="80" x2="749" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="749" y="70" text-anchor="middle" font-size="10">59</text>
+<line x1="761" y1="80" x2="761" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="761" y="70" text-anchor="middle" font-size="10">60</text>
+<line x1="772" y1="80" x2="772" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="772" y="70" text-anchor="middle" font-size="10">61</text>
+<line x1="783" y1="80" x2="783" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="783" y="70" text-anchor="middle" font-size="10">62</text>
+<line x1="795" y1="80" x2="795" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="795" y="70" text-anchor="middle" font-size="10">63</text>
+<line x1="806" y1="80" x2="806" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="806" y="70" text-anchor="middle" font-size="10">64</text>
+<line x1="817" y1="80" x2="817" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="817" y="70" text-anchor="middle" font-size="10">65</text>
+<line x1="829" y1="80" x2="829" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="829" y="70" text-anchor="middle" font-size="10">66</text>
+<line x1="840" y1="80" x2="840" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="840" y="70" text-anchor="middle" font-size="10">67</text>
+<line x1="851" y1="80" x2="851" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="851" y="70" text-anchor="middle" font-size="10">68</text>
+<line x1="863" y1="80" x2="863" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="863" y="70" text-anchor="middle" font-size="10">69</text>
+<line x1="874" y1="80" x2="874" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="874" y="70" text-anchor="middle" font-size="10">70</text>
+<line x1="885" y1="80" x2="885" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="885" y="70" text-anchor="middle" font-size="10">71</text>
+<line x1="897" y1="80" x2="897" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="897" y="70" text-anchor="middle" font-size="10">72</text>
+<line x1="908" y1="80" x2="908" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="908" y="70" text-anchor="middle" font-size="10">73</text>
+<line x1="920" y1="80" x2="920" y2="120" stroke="#ccc" stroke-width="1"/>
+<text x="920" y="70" text-anchor="middle" font-size="10">74</text>
 <line x1="80" y1="80" x2="920" y2="80" stroke="black" stroke-width="2"/>
-<line x1="80" y1="80" x2="80" y2="200" stroke="black" stroke-width="2"/>
-<rect x="80" y="80" width="252" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
-<text x="206" y="98" text-anchor="middle" font-size="10" fill="white">3,0</text>
-<title>P1: 0,0-3,0 (duraçao: 3,0)</title>
-<rect x="332" y="120" width="252" height="30" fill="#FF6B6B" stroke="black" stroke-width="1"/>
-<text x="458" y="138" text-anchor="middle" font-size="10" fill="white">3,0</text>
-<title>P2: 3,0-6,0 (duraçao: 3,0)</title>
-<rect x="584" y="80" width="168" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
-<text x="668" y="98" text-anchor="middle" font-size="10" fill="white">2,0</text>
-<title>P1: 6,0-8,0 (duraçao: 2,0)</title>
-<rect x="752" y="160" width="168" height="30" fill="#45B7D1" stroke="black" stroke-width="1"/>
-<text x="836" y="178" text-anchor="middle" font-size="10" fill="white">2,0</text>
-<title>P3: 8,0-10,0 (duraçao: 2,0)</title>
-<text x="500" y="380" text-anchor="middle" font-size="12" fill="#666">Tempo total: 10 | Processos: 3 | Eventos: 4</text>
+<line x1="80" y1="80" x2="80" y2="120" stroke="black" stroke-width="2"/>
+<rect x="91" y="80" width="45" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<text x="113" y="98" text-anchor="middle" font-size="10" fill="white">4,0</text>
+<title>t01: 1,0-5,0 (duraçao: 4,0)</title>
+<rect x="136" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 5,0-6,0 (duraçao: 1,0)</title>
+<rect x="148" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 6,0-7,0 (duraçao: 1,0)</title>
+<rect x="159" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 7,0-8,0 (duraçao: 1,0)</title>
+<rect x="170" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 8,0-9,0 (duraçao: 1,0)</title>
+<rect x="182" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 9,0-10,0 (duraçao: 1,0)</title>
+<rect x="193" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 10,0-11,0 (duraçao: 1,0)</title>
+<rect x="204" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 11,0-12,0 (duraçao: 1,0)</title>
+<rect x="216" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 12,0-13,0 (duraçao: 1,0)</title>
+<rect x="227" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 13,0-14,0 (duraçao: 1,0)</title>
+<rect x="238" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 14,0-15,0 (duraçao: 1,0)</title>
+<rect x="250" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 15,0-16,0 (duraçao: 1,0)</title>
+<rect x="261" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 16,0-17,0 (duraçao: 1,0)</title>
+<rect x="272" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 17,0-18,0 (duraçao: 1,0)</title>
+<rect x="284" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 18,0-19,0 (duraçao: 1,0)</title>
+<rect x="295" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 19,0-20,0 (duraçao: 1,0)</title>
+<rect x="307" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 20,0-21,0 (duraçao: 1,0)</title>
+<rect x="318" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 21,0-22,0 (duraçao: 1,0)</title>
+<rect x="329" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 22,0-23,0 (duraçao: 1,0)</title>
+<rect x="341" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 23,0-24,0 (duraçao: 1,0)</title>
+<rect x="352" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 24,0-25,0 (duraçao: 1,0)</title>
+<rect x="363" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 25,0-26,0 (duraçao: 1,0)</title>
+<rect x="375" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 26,0-27,0 (duraçao: 1,0)</title>
+<rect x="386" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 27,0-28,0 (duraçao: 1,0)</title>
+<rect x="397" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 28,0-29,0 (duraçao: 1,0)</title>
+<rect x="409" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 29,0-30,0 (duraçao: 1,0)</title>
+<rect x="420" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 30,0-31,0 (duraçao: 1,0)</title>
+<rect x="431" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 31,0-32,0 (duraçao: 1,0)</title>
+<rect x="443" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 32,0-33,0 (duraçao: 1,0)</title>
+<rect x="454" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 33,0-34,0 (duraçao: 1,0)</title>
+<rect x="465" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 34,0-35,0 (duraçao: 1,0)</title>
+<rect x="477" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 35,0-36,0 (duraçao: 1,0)</title>
+<rect x="488" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 36,0-37,0 (duraçao: 1,0)</title>
+<rect x="500" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 37,0-38,0 (duraçao: 1,0)</title>
+<rect x="511" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 38,0-39,0 (duraçao: 1,0)</title>
+<rect x="522" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 39,0-40,0 (duraçao: 1,0)</title>
+<rect x="534" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 40,0-41,0 (duraçao: 1,0)</title>
+<rect x="545" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 41,0-42,0 (duraçao: 1,0)</title>
+<rect x="556" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 42,0-43,0 (duraçao: 1,0)</title>
+<rect x="568" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 43,0-44,0 (duraçao: 1,0)</title>
+<rect x="579" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 44,0-45,0 (duraçao: 1,0)</title>
+<rect x="590" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 45,0-46,0 (duraçao: 1,0)</title>
+<rect x="602" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 46,0-47,0 (duraçao: 1,0)</title>
+<rect x="613" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 47,0-48,0 (duraçao: 1,0)</title>
+<rect x="624" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 48,0-49,0 (duraçao: 1,0)</title>
+<rect x="636" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 49,0-50,0 (duraçao: 1,0)</title>
+<rect x="647" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 50,0-51,0 (duraçao: 1,0)</title>
+<rect x="658" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 51,0-52,0 (duraçao: 1,0)</title>
+<rect x="670" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 52,0-53,0 (duraçao: 1,0)</title>
+<rect x="681" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 53,0-54,0 (duraçao: 1,0)</title>
+<rect x="692" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 54,0-55,0 (duraçao: 1,0)</title>
+<rect x="704" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 55,0-56,0 (duraçao: 1,0)</title>
+<rect x="715" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 56,0-57,0 (duraçao: 1,0)</title>
+<rect x="727" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 57,0-58,0 (duraçao: 1,0)</title>
+<rect x="738" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 58,0-59,0 (duraçao: 1,0)</title>
+<rect x="749" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 59,0-60,0 (duraçao: 1,0)</title>
+<rect x="761" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 60,0-61,0 (duraçao: 1,0)</title>
+<rect x="772" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 61,0-62,0 (duraçao: 1,0)</title>
+<rect x="783" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 62,0-63,0 (duraçao: 1,0)</title>
+<rect x="795" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 63,0-64,0 (duraçao: 1,0)</title>
+<rect x="806" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 64,0-65,0 (duraçao: 1,0)</title>
+<rect x="817" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 65,0-66,0 (duraçao: 1,0)</title>
+<rect x="829" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 66,0-67,0 (duraçao: 1,0)</title>
+<rect x="840" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 67,0-68,0 (duraçao: 1,0)</title>
+<rect x="851" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 68,0-69,0 (duraçao: 1,0)</title>
+<rect x="863" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 69,0-70,0 (duraçao: 1,0)</title>
+<rect x="874" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 70,0-71,0 (duraçao: 1,0)</title>
+<rect x="885" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 71,0-72,0 (duraçao: 1,0)</title>
+<rect x="897" y="80" width="11" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 72,0-73,0 (duraçao: 1,0)</title>
+<rect x="908" y="80" width="12" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<title>t01: 73,0-74,0 (duraçao: 1,0)</title>
+<text x="500" y="380" text-anchor="middle" font-size="12" fill="#666">Tempo total: 74 | Processos: 1 | Eventos: 70</text>
 </svg>
