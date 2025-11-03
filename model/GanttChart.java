@@ -20,12 +20,42 @@ public class GanttChart {
      */
     public void recordExecution(String processId, int startTime, int endTime) {
         if (endTime > startTime && processId != null && !processId.equals("IDLE")) {
-            GanttEvent event = new GanttEvent(processId, startTime, endTime, "running");
-            events.add(event);
-            System.out.println("Gantt Event recorded: " + event);
+            // Try to merge with previous event for same process/state if contiguous
+            GanttEvent last = findLastEvent(processId);
+            if (last != null && "running".equals(last.state) && last.endTime == startTime) {
+                last.endTime = endTime;
+            } else {
+                GanttEvent event = new GanttEvent(processId, startTime, endTime, "running");
+                events.add(event);
+            }
+            System.out.println("Gantt Event recorded: " + processId + " " + startTime + "-" + endTime);
         } else {
-            System.out.println("Gantt Event skipped - invalid: " + processId + " from " + startTime + " to " + endTime);
+            // ignore invalid
         }
+    }
+
+    /**
+     * Registra tempo de espera de um processo (será mostrado em tom mais claro)
+     */
+    public void recordWait(String processId, int startTime, int endTime) {
+        if (endTime > startTime && processId != null && !processId.equals("IDLE")) {
+            GanttEvent last = findLastEvent(processId);
+            if (last != null && "waiting".equals(last.state) && last.endTime == startTime) {
+                last.endTime = endTime;
+            } else {
+                GanttEvent event = new GanttEvent(processId, startTime, endTime, "waiting");
+                events.add(event);
+            }
+            System.out.println("Gantt Wait recorded: " + processId + " " + startTime + "-" + endTime);
+        }
+    }
+
+    private GanttEvent findLastEvent(String processId) {
+        for (int i = events.size() - 1; i >= 0; i--) {
+            GanttEvent e = events.get(i);
+            if (e.processId.equals(processId)) return e;
+        }
+        return null;
     }
     
     /**
@@ -154,9 +184,22 @@ public class GanttChart {
             
             int y = margin + processRows.get(event.processId) * (rowHeight + rowSpacing);
             
-            // Barra
-            out.printf("<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" fill=\"%s\" stroke=\"black\" stroke-width=\"1\"/>\n",
-                      startX, y, barWidth, rowHeight, color);
+            if ("running".equals(event.state)) {
+                // Barra cheia para execução
+                out.printf("<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" fill=\"%s\" stroke=\"black\" stroke-width=\"1\"/>\n",
+                          startX, y, barWidth, rowHeight, color);
+            } else if ("waiting".equals(event.state)) {
+                // Barra menor/mais clara para espera (centro da linha)
+                int waitHeight = Math.max(4, rowHeight / 3);
+                int waitY = y + (rowHeight - waitHeight) / 2;
+                out.printf("<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" fill=\"#f0f0f0\" stroke=\"#cccccc\" stroke-width=\"1\"/>\n",
+                          startX, waitY, barWidth, waitHeight);
+            } else {
+                // estado desconhecido: desenha como linha fina
+                int thinY = y + rowHeight/2;
+                out.printf("<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"%s\" stroke-width=\"2\"/>\n",
+                          startX, thinY, endX, thinY, color);
+            }
             
             // Label de duração (se couber)
             if (barWidth > 25) {

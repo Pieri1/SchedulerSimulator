@@ -87,6 +87,13 @@ public class SimController {
                 p.executeTick();
             } else {
                 p.waitTick();
+                // registra tempo de espera no Gantt (intervalo [time, time+1))
+                try {
+                    ganttChart.recordWait(String.valueOf(p.getId()), time, time + 1);
+                } catch (Exception ex) {
+                    // não interrompe a simulação por problema no Gantt
+                    ex.printStackTrace();
+                }
             }
         }
 
