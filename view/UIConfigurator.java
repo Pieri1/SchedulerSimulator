@@ -64,6 +64,21 @@ public class UIConfigurator extends JFrame {
         panel.add(new JLabel("Arquivo de Configuração:"));
         JPanel filePanel = new JPanel(new BorderLayout());
         filePathField = new JTextField("config/test.txt");
+        JButton browseButton = new JButton("Procurar...");
+        browseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setDialogTitle("Selecione o arquivo de configuração");
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            int ret = chooser.showOpenDialog(UIConfigurator.this);
+            if (ret == JFileChooser.APPROVE_OPTION) {
+                java.io.File f = chooser.getSelectedFile();
+                filePathField.setText(f.getAbsolutePath());
+            }
+            }
+        });
+        filePanel.add(browseButton, BorderLayout.WEST);
         loadFileButton = new JButton("Carregar");
         
         loadFileButton.addActionListener(new ActionListener() {
