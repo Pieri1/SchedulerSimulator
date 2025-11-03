@@ -194,7 +194,39 @@ public class UIRunner extends JFrame {
         timeLabel.setText(String.valueOf(currentTime));
         
         // Atualiza logs - mostra informações básicas
-        logTextArea.append("[t=" + currentTime + "] Simulação em andamento...\n");
+        // Limpa o log e imprime todas as características de cada processo via reflexão
+        logTextArea.setText("");
+        logTextArea.append("Estado no tempo " + currentTime + ":\n\n");
+
+        for (model.Process p : config.getProcessList()) {
+            logTextArea.append("Processo:\n");
+            // Usa reflexão para listar getters/isers disponíveis
+            java.lang.reflect.Method[] methods = p.getClass().getMethods();
+            for (java.lang.reflect.Method m : methods) {
+            String name = m.getName();
+            // Seleciona métodos que representem propriedades: getXxx() ou isXxx(), exclui getClass()
+            if ((name.startsWith("get") && !name.equals("getClass")) || name.startsWith("is")) {
+                if (m.getParameterTypes().length != 0) continue; // pula métodos com parâmetros
+                String propName;
+                if (name.startsWith("get")) {
+                propName = name.substring(3);
+                } else {
+                propName = name.substring(2);
+                }
+                if (propName.length() == 0) continue;
+                propName = Character.toLowerCase(propName.charAt(0)) + propName.substring(1);
+
+                Object value;
+                try {
+                value = m.invoke(p);
+                } catch (Exception ex) {
+                value = "<erro ao obter>";
+                }
+                logTextArea.append("  " + propName + ": " + String.valueOf(value));
+            }
+            }
+            logTextArea.append("---------------------------\n");
+        }
         
         // Mantém apenas os últimos 1000 caracteres no log para não ficar muito pesado
         if (logTextArea.getText().length() > 1000) {
