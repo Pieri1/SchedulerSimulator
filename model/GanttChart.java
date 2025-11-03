@@ -159,6 +159,16 @@ public class GanttChart {
                       margin - 10, y + 4, process);
             row++;
         }
+
+        // Atribui cores distintas de forma determinística por linha (evita cores repetidas)
+        int totalProcesses = Math.max(1, processRows.size());
+        for (Map.Entry<String, Integer> e : processRows.entrySet()) {
+            int idx = e.getValue();
+            float hue = idx / (float) totalProcesses; // espaçamento uniforme
+            java.awt.Color c = java.awt.Color.getHSBColor(hue, 0.65f, 0.9f);
+            String hex = String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue());
+            processColors.put(e.getKey(), hex);
+        }
         
         // Grade de tempo
         for (int t = 0; t <= maxTime; t++) {
@@ -175,17 +185,9 @@ public class GanttChart {
     out.printf("<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"black\" stroke-width=\"2\"/>\n",
           margin, margin, margin, margin + contentHeight);
         
-        // Barras do Gantt - versão simplificada sem lambda problemático
-        String[] colors = {"#4ECDC4", "#FF6B6B", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD"};
-        int colorCounter = 0;
-
+        // Barras do Gantt
         for (GanttEvent event : events) {
-            // Atribui cores de forma simples
-            if (!processColors.containsKey(event.processId)) {
-                processColors.put(event.processId, colors[colorCounter % colors.length]);
-                colorCounter++;
-            }
-            String color = processColors.get(event.processId);
+            String color = processColors.getOrDefault(event.processId, "#4ECDC4");
             
             int startX = margin + (int)((event.startTime * chartWidth) / Math.max(1, maxTime));
             int endX = margin + (int)((event.endTime * chartWidth) / Math.max(1, maxTime));
@@ -322,14 +324,9 @@ public class GanttChart {
             g.drawLine(margin, margin, margin, margin + contentHeight);
 
             // Barras do Gantt
-            String[] colors = {"#4ECDC4", "#FF6B6B", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD"};
-            int colorCounter = 0;
+            // Barras do Gantt
             for (GanttEvent event : events) {
-                if (!processColors.containsKey(event.processId)) {
-                    processColors.put(event.processId, colors[colorCounter % colors.length]);
-                    colorCounter++;
-                }
-                String hex = processColors.get(event.processId);
+                String hex = processColors.getOrDefault(event.processId, "#4ECDC4");
                 Color procColor = Color.decode(hex);
 
                 int startX = margin + (int) ((event.startTime * chartWidth) / Math.max(1, maxTime));
