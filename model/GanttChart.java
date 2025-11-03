@@ -32,16 +32,23 @@ public class GanttChart {
      * Gera o gráfico SVG
      */
     public void generateChart(String filename) {
+        generateChart(filename, null);
+    }
+
+    /**
+     * Gera o gráfico SVG incluindo também processos da lista fornecida mesmo sem eventos.
+     */
+    public void generateChart(String filename, List<model.Process> processList) {
         System.out.println("Generating Gantt Chart with " + events.size() + " events");
-        
-        if (events.isEmpty()) {
+
+        if (events.isEmpty() && (processList == null || processList.isEmpty())) {
             System.out.println("AVISO: Nenhum evento para gerar Gantt Chart");
             // Vamos criar alguns eventos de exemplo para debug
             createDebugEvents();
         }
-        
+
         try (PrintWriter out = new PrintWriter(new FileWriter(filename))) {
-            generateSVG(out);
+            generateSVG(out, processList);
             System.out.println("Gantt Chart gerado: " + filename);
         } catch (IOException e) {
             System.err.println("Erro ao gerar gráfico: " + e.getMessage());
@@ -59,7 +66,7 @@ public class GanttChart {
         recordExecution("P3", 8, 10);
     }
     
-    private void generateSVG(PrintWriter out) {
+    private void generateSVG(PrintWriter out, List<model.Process> processList) {
         // Encontra o tempo máximo
         int maxTime = events.stream()
                 .mapToInt(e -> (int) e.endTime)
@@ -71,21 +78,29 @@ public class GanttChart {
         for (GanttEvent event : events) {
             processes.add(event.processId);
         }
+        // Inclui processos da lista passada mesmo que não tenham eventos
+        if (processList != null) {
+            for (model.Process p : processList) {
+                if (p != null) processes.add(String.valueOf(p.getId()));
+            }
+        }
         
         System.out.println("Processos no Gantt: " + processes);
         System.out.println("Tempo máximo: " + maxTime);
         
-        // Configurações do gráfico
-        int width = 1000;
-        int height = 400;
-        int margin = 80;
-        int chartWidth = width - 2 * margin;
-        int rowHeight = 30;
-        int rowSpacing = 10;
+    // Configurações do gráfico (altura ajusta-se dinamicamente ao número de processos)
+    int width = 1000;
+    int margin = 80;
+    int rowHeight = 30;
+    int rowSpacing = 10;
+    int contentHeight = processes.size() * (rowHeight + rowSpacing);
+    int minHeight = 400; // mínima para boa aparência
+    int height = Math.max(minHeight, margin * 2 + contentHeight + 100);
+    int chartWidth = width - 2 * margin;
         
-        // Cabeçalho SVG
-        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        out.printf("<svg width=\"%d\" height=\"%d\" xmlns=\"http://www.w3.org/2000/svg\">\n", width, height);
+    // Cabeçalho SVG
+    out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    out.printf("<svg width=\"%d\" height=\"%d\" xmlns=\"http://www.w3.org/2000/svg\">\n", width, height);
         
         // Fundo
         out.println("<rect width=\"100%\" height=\"100%\" fill=\"white\"/>");
@@ -109,17 +124,17 @@ public class GanttChart {
         // Grade de tempo
         for (int t = 0; t <= maxTime; t++) {
             int x = margin + (t * chartWidth) / Math.max(1, maxTime);
-            out.printf("<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"#ccc\" stroke-width=\"1\"/>\n", 
-                      x, margin, x, margin + processes.size() * (rowHeight + rowSpacing));
-            out.printf("<text x=\"%d\" y=\"%d\" text-anchor=\"middle\" font-size=\"10\">%d</text>\n", 
+            out.printf("<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"#ccc\" stroke-width=\"1\"/>\n",
+                      x, margin, x, margin + contentHeight);
+            out.printf("<text x=\"%d\" y=\"%d\" text-anchor=\"middle\" font-size=\"10\">%d</text>\n",
                       x, margin - 10, t);
         }
         
         // Eixos
-        out.printf("<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"black\" stroke-width=\"2\"/>\n", 
-                  margin, margin, margin + chartWidth, margin);
-        out.printf("<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"black\" stroke-width=\"2\"/>\n", 
-                  margin, margin, margin, margin + processes.size() * (rowHeight + rowSpacing));
+    out.printf("<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"black\" stroke-width=\"2\"/>\n",
+          margin, margin, margin + chartWidth, margin);
+    out.printf("<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke=\"black\" stroke-width=\"2\"/>\n",
+          margin, margin, margin, margin + contentHeight);
         
         // Barras do Gantt - versão simplificada sem lambda problemático
         String[] colors = {"#4ECDC4", "#FF6B6B", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD"};

@@ -135,7 +135,8 @@ public class SimController {
         
         // Encerra a simulação e gera Gantt
         clock.stop();
-        ganttChart.generateChart("simulation_gantt.svg");
+        // Gera o Gantt incluindo todos os processos da configuração para garantir linhas mesmo sem execução
+        ganttChart.generateChart("simulation_gantt.svg", config.getProcessList());
         System.out.println("Simulação encerrada em t=" + clock.getCurrentTime());
         System.out.println("Gantt gerado: simulation_gantt.svg");
     }
