@@ -1,6 +1,8 @@
 package view;
 
 import controller.SimController;
+import model.Process;
+import model.SimulationConfig;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -105,19 +107,24 @@ public class UIResult extends JFrame {
         
         // Em uma implementação real, você obteria essas informações do controller
         // Por enquanto, vamos usar dados de exemplo
-        for (int i = 1; i <= 3; i++) {
-            int execTime = i * 2;
-            int waitTime = i;
-            boolean completed = i < 3;
-            
-            sb.append(String.format("Processo P%d: Execução=%d, Espera=%d, Concluído=%s\n",
-                    i, execTime, waitTime, completed ? "Sim" : "Não"));
-            
-            totalProcesses++;
-            if (completed) completedProcesses++;
-            totalExecutionTime += execTime;
-            totalWaitTime += waitTime;
-        }
+        SimulationConfig config = controller.getConfig();
+            for (Process process : config.getProcessList()) {
+                int execTime = process.getRunTime();
+                int waitTime = process.getWaitTime();
+                boolean completed = process.isCompleted();
+                try {
+                    // Use %s to avoid format conversion issues if types vary
+                    sb.append(String.format("Processo P%s: Execução=%s, Espera=%s, Concluído=%s\n",
+                            String.valueOf(process.getId()), String.valueOf(execTime), String.valueOf(waitTime), completed ? "Sim" : "Não"));
+                } catch (Exception ex) {
+                    sb.append("Processo P" + process.getId() + ": Execução=" + execTime + ", Espera=" + waitTime + ", Concluído=" + (completed ? "Sim" : "Não") + "\n");
+                }
+
+                totalProcesses++;
+                if (completed) completedProcesses++;
+                totalExecutionTime += execTime;
+                totalWaitTime += waitTime;
+    }
         
         sb.append("\n=== ESTATÍSTICAS GERAIS ===\n");
         sb.append(String.format("Processos Totais: %d\n", totalProcesses));

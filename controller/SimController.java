@@ -155,6 +155,10 @@ public class SimController {
         return clock.getCurrentTime();
     }
 
+    public SimulationConfig getConfig() {
+        return config;
+    }
+
     public GanttChart getGanttChart() {
         return ganttChart;
     }
