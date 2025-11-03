@@ -2,6 +2,15 @@ package model;
 
 import java.io.*;
 import java.util.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.BasicStroke;
+import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 /**
  * GanttChart - Gera gráficos de Gantt em SVG para visualização do escalonamento de processos
@@ -217,6 +226,161 @@ public class GanttChart {
                   width/2, height - 20, maxTime, processes.size(), events.size());
         
         out.println("</svg>");
+    }
+    
+    /**
+     * Gera o gráfico em PNG (sem dependências externas) reproduzindo o mesmo layout do SVG
+     */
+    public void generateChartPNG(String filename) {
+        generateChartPNG(filename, null);
+    }
+
+    public void generateChartPNG(String filename, List<model.Process> processList) {
+        File outFile = new File(filename);
+        try {
+            generatePNG(outFile, processList);
+            System.out.println("Gantt PNG gerado: " + filename);
+        } catch (IOException e) {
+            System.err.println("Erro ao gerar PNG: " + e.getMessage());
+        }
+    }
+
+    private void generatePNG(File outFile, List<model.Process> processList) throws IOException {
+        // Reuse the layout logic from generateSVG
+        int width = 1000;
+        int margin = 80;
+        int rowHeight = 30;
+        int rowSpacing = 10;
+
+        int maxTime = events.stream()
+                .mapToInt(e -> (int) e.endTime)
+                .max()
+                .orElse(10);
+
+        // Coleta processos únicos
+        java.util.Set<String> processes = new java.util.TreeSet<>();
+        for (GanttEvent event : events) {
+            processes.add(event.processId);
+        }
+        if (processList != null) {
+            for (model.Process p : processList) {
+                if (p != null) processes.add(String.valueOf(p.getId()));
+            }
+        }
+
+        int contentHeight = processes.size() * (rowHeight + rowSpacing);
+        int minHeight = 400;
+        int height = Math.max(minHeight, margin * 2 + contentHeight + 100);
+        int chartWidth = width - 2 * margin;
+
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = img.createGraphics();
+        try {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            // Fundo
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, width, height);
+
+            // Título
+            g.setColor(Color.BLACK);
+            Font titleFont = new Font("SansSerif", Font.BOLD, 18);
+            g.setFont(titleFont);
+            FontMetrics fm = g.getFontMetrics();
+            String title = "Gráfico de Gantt - Escalonamento";
+            int titleW = fm.stringWidth(title);
+            g.drawString(title, (width - titleW) / 2, 30);
+
+            // Mapeia processos para linhas
+            java.util.Map<String, Integer> processRows = new java.util.HashMap<>();
+            int row = 0;
+            Font labelFont = new Font("SansSerif", Font.PLAIN, 12);
+            g.setFont(labelFont);
+            fm = g.getFontMetrics();
+            for (String process : processes) {
+                processRows.put(process, row);
+                int y = margin + row * (rowHeight + rowSpacing) + rowHeight / 2 + 4;
+                int labelX = margin - 10 - fm.stringWidth(process);
+                g.setColor(Color.BLACK);
+                g.drawString(process, labelX, y);
+                row++;
+            }
+
+            // Grade de tempo
+            g.setColor(new Color(0xCC,0xCC,0xCC));
+            for (int t = 0; t <= maxTime; t++) {
+                int x = margin + (int) ((t * chartWidth) / Math.max(1, maxTime));
+                g.drawLine(x, margin, x, margin + contentHeight);
+                String ts = String.valueOf(t);
+                int tx = x - g.getFontMetrics().stringWidth(ts)/2;
+                g.drawString(ts, tx, margin - 10);
+            }
+
+            // Eixos
+            g.setColor(Color.BLACK);
+            g.setStroke(new BasicStroke(2));
+            g.drawLine(margin, margin, margin + chartWidth, margin);
+            g.drawLine(margin, margin, margin, margin + contentHeight);
+
+            // Barras do Gantt
+            String[] colors = {"#4ECDC4", "#FF6B6B", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD"};
+            int colorCounter = 0;
+            for (GanttEvent event : events) {
+                if (!processColors.containsKey(event.processId)) {
+                    processColors.put(event.processId, colors[colorCounter % colors.length]);
+                    colorCounter++;
+                }
+                String hex = processColors.get(event.processId);
+                Color procColor = Color.decode(hex);
+
+                int startX = margin + (int) ((event.startTime * chartWidth) / Math.max(1, maxTime));
+                int endX = margin + (int) ((event.endTime * chartWidth) / Math.max(1, maxTime));
+                int barWidth = Math.max(2, endX - startX);
+                int y = margin + processRows.get(event.processId) * (rowHeight + rowSpacing);
+
+                if ("running".equals(event.state)) {
+                    g.setColor(procColor);
+                    g.fillRect(startX, y, barWidth, rowHeight);
+                    g.setColor(Color.BLACK);
+                    g.drawRect(startX, y, barWidth, rowHeight);
+                } else if ("waiting".equals(event.state)) {
+                    Color waitCol = Color.decode("#f0f0f0");
+                    int waitHeight = Math.max(4, rowHeight / 3);
+                    int waitY = y + (rowHeight - waitHeight) / 2;
+                    g.setColor(waitCol);
+                    g.fillRect(startX, waitY, barWidth, waitHeight);
+                    g.setColor(new Color(0xCC,0xCC,0xCC));
+                    g.drawRect(startX, waitY, barWidth, waitHeight);
+                } else {
+                    int thinY = y + rowHeight/2;
+                    g.setColor(procColor);
+                    g.setStroke(new BasicStroke(2));
+                    g.drawLine(startX, thinY, endX, thinY);
+                }
+
+                // Label de duração
+                if (barWidth > 25) {
+                    String dur = String.format("%.1f", event.endTime - event.startTime);
+                    FontMetrics fm2 = g.getFontMetrics();
+                    int tw = fm2.stringWidth(dur);
+                    g.setColor(Color.WHITE);
+                    g.drawString(dur, startX + (barWidth - tw)/2, y + rowHeight/2 + 4);
+                }
+            }
+
+            // Rodapé
+            String footer = String.format("Tempo total: %d | Processos: %d | Eventos: %d", maxTime, processes.size(), events.size());
+            Font footerFont = new Font("SansSerif", Font.PLAIN, 12);
+            g.setFont(footerFont);
+            int fw = g.getFontMetrics().stringWidth(footer);
+            g.setColor(new Color(0x66,0x66,0x66));
+            g.drawString(footer, (width - fw)/2, height - 20);
+
+        } finally {
+            g.dispose();
+        }
+
+        // Escreve PNG
+        ImageIO.write(img, "png", outFile);
     }
     
     public void clear() {

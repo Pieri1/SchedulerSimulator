@@ -5,6 +5,7 @@ import model.SimulationConfig;
 import model.SystemClock;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,6 +20,7 @@ public class UIRunner extends JFrame {
     private JButton autoButton;
     private JButton stopButton;
     private JPanel ganttPanel;
+    private JLabel ganttImageLabel;
     private Timer autoTimer;
     
     public UIRunner(SimulationConfig config) {
@@ -46,7 +48,12 @@ public class UIRunner extends JFrame {
         ganttPanel.setBackground(Color.WHITE);
         ganttPanel.setBorder(BorderFactory.createTitledBorder("Visualização do Gantt Chart"));
         ganttPanel.setPreferredSize(new Dimension(800, 200));
-        mainPanel.add(ganttPanel, BorderLayout.CENTER);
+    ganttPanel.setLayout(new BorderLayout());
+    // Label que exibirá a imagem PNG do Gantt
+    ganttImageLabel = new JLabel();
+    ganttImageLabel.setHorizontalAlignment(JLabel.CENTER);
+    ganttPanel.add(ganttImageLabel, BorderLayout.CENTER);
+    mainPanel.add(ganttPanel, BorderLayout.CENTER);
         
         // Área de logs
         logTextArea = new JTextArea(10, 60);
@@ -237,15 +244,24 @@ public class UIRunner extends JFrame {
     }
     
     private void updateGanttChart() {
-        // Simulação básica da atualização do Gantt Chart
-        ganttPanel.removeAll();
-        ganttPanel.setLayout(new BorderLayout());
-        
-        JLabel ganttLabel = new JLabel("Gantt Chart - Tempo: " + controller.getCurrentTime() + 
-                                      " | Algoritmo: " + config.getAlgorithmName(), JLabel.CENTER);
-        ganttLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        ganttPanel.add(ganttLabel, BorderLayout.CENTER);
-        
+        // Gera PNG do Gantt e atualiza a JLabel com ImageIcon
+        try {
+            // Gera o PNG (inclui todos os processos configurados)
+            controller.getGanttChart().generateChartPNG("simulation_gantt.png", config.getProcessList());
+
+            ImageIcon icon = new ImageIcon("simulation_gantt.png");
+            // Escala para caber no painel mantendo proporção simples
+            int pw = ganttPanel.getWidth() > 0 ? ganttPanel.getWidth() : 800;
+            int ph = ganttPanel.getHeight() > 0 ? ganttPanel.getHeight() : 200;
+            Image img = icon.getImage();
+            Image scaled = img.getScaledInstance(pw, ph, Image.SCALE_SMOOTH);
+            ganttImageLabel.setIcon(new ImageIcon(scaled));
+            ganttImageLabel.setText("");
+        } catch (Exception ex) {
+            ganttImageLabel.setIcon(null);
+            ganttImageLabel.setText("Erro ao gerar/mostrar Gantt: " + ex.getMessage());
+            ex.printStackTrace();
+        }
         ganttPanel.revalidate();
         ganttPanel.repaint();
     }

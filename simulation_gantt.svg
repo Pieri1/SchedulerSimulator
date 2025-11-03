@@ -7,36 +7,37 @@
 <text x="70" y="179" text-anchor="end" font-size="12">t03</text>
 <line x1="80" y1="80" x2="80" y2="200" stroke="#ccc" stroke-width="1"/>
 <text x="80" y="70" text-anchor="middle" font-size="10">0</text>
-<line x1="164" y1="80" x2="164" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="164" y="70" text-anchor="middle" font-size="10">1</text>
-<line x1="248" y1="80" x2="248" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="248" y="70" text-anchor="middle" font-size="10">2</text>
-<line x1="332" y1="80" x2="332" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="332" y="70" text-anchor="middle" font-size="10">3</text>
-<line x1="416" y1="80" x2="416" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="416" y="70" text-anchor="middle" font-size="10">4</text>
-<line x1="500" y1="80" x2="500" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="500" y="70" text-anchor="middle" font-size="10">5</text>
-<line x1="584" y1="80" x2="584" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="584" y="70" text-anchor="middle" font-size="10">6</text>
-<line x1="668" y1="80" x2="668" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="668" y="70" text-anchor="middle" font-size="10">7</text>
-<line x1="752" y1="80" x2="752" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="752" y="70" text-anchor="middle" font-size="10">8</text>
-<line x1="836" y1="80" x2="836" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="836" y="70" text-anchor="middle" font-size="10">9</text>
+<line x1="173" y1="80" x2="173" y2="200" stroke="#ccc" stroke-width="1"/>
+<text x="173" y="70" text-anchor="middle" font-size="10">1</text>
+<line x1="266" y1="80" x2="266" y2="200" stroke="#ccc" stroke-width="1"/>
+<text x="266" y="70" text-anchor="middle" font-size="10">2</text>
+<line x1="360" y1="80" x2="360" y2="200" stroke="#ccc" stroke-width="1"/>
+<text x="360" y="70" text-anchor="middle" font-size="10">3</text>
+<line x1="453" y1="80" x2="453" y2="200" stroke="#ccc" stroke-width="1"/>
+<text x="453" y="70" text-anchor="middle" font-size="10">4</text>
+<line x1="546" y1="80" x2="546" y2="200" stroke="#ccc" stroke-width="1"/>
+<text x="546" y="70" text-anchor="middle" font-size="10">5</text>
+<line x1="640" y1="80" x2="640" y2="200" stroke="#ccc" stroke-width="1"/>
+<text x="640" y="70" text-anchor="middle" font-size="10">6</text>
+<line x1="733" y1="80" x2="733" y2="200" stroke="#ccc" stroke-width="1"/>
+<text x="733" y="70" text-anchor="middle" font-size="10">7</text>
+<line x1="826" y1="80" x2="826" y2="200" stroke="#ccc" stroke-width="1"/>
+<text x="826" y="70" text-anchor="middle" font-size="10">8</text>
 <line x1="920" y1="80" x2="920" y2="200" stroke="#ccc" stroke-width="1"/>
-<text x="920" y="70" text-anchor="middle" font-size="10">10</text>
+<text x="920" y="70" text-anchor="middle" font-size="10">9</text>
 <line x1="80" y1="80" x2="920" y2="80" stroke="black" stroke-width="2"/>
 <line x1="80" y1="80" x2="80" y2="200" stroke="black" stroke-width="2"/>
-<rect x="164" y="80" width="336" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
-<text x="332" y="98" text-anchor="middle" font-size="10" fill="white">4,0</text>
-<title>t01: 1,0-5,0 (duraçao: 4,0)</title>
-<rect x="500" y="160" width="168" height="30" fill="#FF6B6B" stroke="black" stroke-width="1"/>
-<text x="584" y="178" text-anchor="middle" font-size="10" fill="white">2,0</text>
-<title>t03: 5,0-7,0 (duraçao: 2,0)</title>
-<rect x="668" y="120" width="252" height="30" fill="#45B7D1" stroke="black" stroke-width="1"/>
-<text x="794" y="138" text-anchor="middle" font-size="10" fill="white">3,0</text>
-<title>t02: 7,0-10,0 (duraçao: 3,0)</title>
-<text x="500" y="380" text-anchor="middle" font-size="12" fill="#666">Tempo total: 10 | Processos: 3 | Eventos: 3</text>
+<rect x="266" y="130" width="374" height="10" fill="#f0f0f0" stroke="#cccccc" stroke-width="1"/>
+<text x="453" y="138" text-anchor="middle" font-size="10" fill="white">4,0</text>
+<title>t02: 2,0-6,0 (duraçao: 4,0)</title>
+<rect x="80" y="80" width="373" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<text x="266" y="98" text-anchor="middle" font-size="10" fill="white">4,0</text>
+<title>t01: 0,0-4,0 (duraçao: 4,0)</title>
+<rect x="453" y="160" width="187" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<text x="546" y="178" text-anchor="middle" font-size="10" fill="white">2,0</text>
+<title>t03: 4,0-6,0 (duraçao: 2,0)</title>
+<rect x="640" y="120" width="280" height="30" fill="#4ECDC4" stroke="black" stroke-width="1"/>
+<text x="780" y="138" text-anchor="middle" font-size="10" fill="white">3,0</text>
+<title>t02: 6,0-9,0 (duraçao: 3,0)</title>
+<text x="500" y="380" text-anchor="middle" font-size="12" fill="#666">Tempo total: 9 | Processos: 3 | Eventos: 4</text>
 </svg>
