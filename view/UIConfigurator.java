@@ -63,7 +63,7 @@ public class UIConfigurator extends JFrame {
         // Arquivo de configuração
         panel.add(new JLabel("Arquivo de Configuração:"));
         JPanel filePanel = new JPanel(new BorderLayout());
-        filePathField = new JTextField("config/test.txt");
+        filePathField = new JTextField("config/test1.txt");
         JButton browseButton = new JButton("Procurar...");
         browseButton.addActionListener(new ActionListener() {
             @Override
