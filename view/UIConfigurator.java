@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class UIConfigurator extends JFrame {
     private JComboBox<String> algorithmCombo;
@@ -52,7 +53,9 @@ public class UIConfigurator extends JFrame {
         
         // Algoritmo
         panel.add(new JLabel("Algoritmo de Escalonamento:"));
-        algorithmCombo = new JComboBox<>(new String[]{"FIFO", "SRTF", "PRIOP"});
+        // Preenche dinamicamente a partir do ServiceLoader para evitar duplicação
+        List<String> algos = SchedulerRegistry.getSchedulerNames();
+        algorithmCombo = new JComboBox<>(algos.toArray(new String[0]));
         panel.add(algorithmCombo);
         
         // Quantum

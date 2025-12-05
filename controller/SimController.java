@@ -2,6 +2,7 @@ package controller;
 
 import model.*;
 import java.util.Locale;
+import java.util.Map;
 
 public class SimController {
     private final SystemClock clock;
@@ -25,21 +26,21 @@ public class SimController {
 
         // Algoritmo selecionado via config
         String algorithm = config.getAlgorithmName().toUpperCase(Locale.ROOT);
-        switch (algorithm) {
-            case "FIFO":
-                scheduler = new FIFO();
-                break;
-            case "PRIOP":
-                scheduler = new PRIOP();
-                break;
-            case "SRTF":
-                scheduler = new SRTF();
-                break;
-            default:
-                System.out.println("Escalonador Desconhecido: " + algorithm + " (Rodando em FIFO como padrão)");
-                scheduler = new FIFO();
-                break;
+        Map<String, Class<? extends Scheduler>> registry = SchedulerRegistry.discoverSchedulers();
+        Class<? extends Scheduler> targetClass = registry.get(algorithm);
+        Scheduler chosen;
+        if (targetClass != null) {
+            try {
+                chosen = targetClass.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                System.out.println("Falha ao instanciar escalonador '" + algorithm + "': " + e.getMessage());
+                chosen = new FIFO();
+            }
+        } else {
+            System.out.println("Escalonador Desconhecido: " + algorithm + " (Rodando em FIFO como padrão)");
+            chosen = new FIFO();
         }
+        scheduler = chosen;
 
         // Assina os ticks do clock
         clock.addListener(this::onTick);
