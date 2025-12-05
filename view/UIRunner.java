@@ -269,7 +269,7 @@ public class UIRunner extends JFrame {
     private boolean allProcessesCompleted() {
         // Verifica se todos os processos foram concluídos
         for (model.Process p : config.getProcessList()) {
-            if (!p.isCompleted() && p.getStartTime() <= controller.getCurrentTime()) {
+            if (!p.isCompleted()) {
                 return false;
             }
         }
