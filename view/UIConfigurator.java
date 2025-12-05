@@ -1,6 +1,5 @@
 package view;
 
-import controller.SimController;
 import model.*;
 import javax.swing.*;
 import java.awt.*;
@@ -64,7 +63,22 @@ public class UIConfigurator extends JFrame {
         // Arquivo de configuração
         panel.add(new JLabel("Arquivo de Configuração:"));
         JPanel filePanel = new JPanel(new BorderLayout());
-        filePathField = new JTextField("config/test.txt");
+        filePathField = new JTextField("config/test1.txt");
+        JButton browseButton = new JButton("Procurar...");
+        browseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setDialogTitle("Selecione o arquivo de configuração");
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            int ret = chooser.showOpenDialog(UIConfigurator.this);
+            if (ret == JFileChooser.APPROVE_OPTION) {
+                java.io.File f = chooser.getSelectedFile();
+                filePathField.setText(f.getAbsolutePath());
+            }
+            }
+        });
+        filePanel.add(browseButton, BorderLayout.WEST);
         loadFileButton = new JButton("Carregar");
         
         loadFileButton.addActionListener(new ActionListener() {
@@ -152,8 +166,16 @@ public class UIConfigurator extends JFrame {
             sb.append("Nenhum processo carregado.\n");
         } else {
             for (model.Process p : currentConfig.getProcessList()) {
-                sb.append(String.format("ID: %s | Cor: %d | Ingresso: %d | Duração: %d | Prioridade: %d\n",
-                        p.getId(), p.getColor(), p.getStartTime(), p.getDuration(), p.getPriority()));
+                try {
+                    // Use %s for all fields to avoid IllegalFormatConversionException when types vary
+                    sb.append(String.format("ID: %s | Cor: %s | Ingresso: %s | Duração: %s | Prioridade: %s\n",
+                            String.valueOf(p.getId()), String.valueOf(p.getColor()), String.valueOf(p.getStartTime()),
+                            String.valueOf(p.getDuration()), String.valueOf(p.getPriority())));
+                } catch (Exception ex) {
+                    // Fallback: safe concatenation
+                    sb.append("ID: " + p.getId() + " | Cor: " + p.getColor() + " | Ingresso: " + p.getStartTime()
+                            + " | Duração: " + p.getDuration() + " | Prioridade: " + p.getPriority() + "\n");
+                }
             }
         }
         

@@ -5,6 +5,7 @@ import model.SimulationConfig;
 import model.SystemClock;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,6 +20,7 @@ public class UIRunner extends JFrame {
     private JButton autoButton;
     private JButton stopButton;
     private JPanel ganttPanel;
+    private JLabel ganttImageLabel;
     private Timer autoTimer;
     
     public UIRunner(SimulationConfig config) {
@@ -46,7 +48,12 @@ public class UIRunner extends JFrame {
         ganttPanel.setBackground(Color.WHITE);
         ganttPanel.setBorder(BorderFactory.createTitledBorder("Visualização do Gantt Chart"));
         ganttPanel.setPreferredSize(new Dimension(800, 200));
-        mainPanel.add(ganttPanel, BorderLayout.CENTER);
+    ganttPanel.setLayout(new BorderLayout());
+    // Label que exibirá a imagem PNG do Gantt
+    ganttImageLabel = new JLabel();
+    ganttImageLabel.setHorizontalAlignment(JLabel.CENTER);
+    ganttPanel.add(ganttImageLabel, BorderLayout.CENTER);
+    mainPanel.add(ganttPanel, BorderLayout.CENTER);
         
         // Área de logs
         logTextArea = new JTextArea(10, 60);
@@ -194,7 +201,39 @@ public class UIRunner extends JFrame {
         timeLabel.setText(String.valueOf(currentTime));
         
         // Atualiza logs - mostra informações básicas
-        logTextArea.append("[t=" + currentTime + "] Simulação em andamento...\n");
+        // Limpa o log e imprime todas as características de cada processo via reflexão
+        logTextArea.setText("");
+        logTextArea.append("Estado no tempo " + currentTime + ":\n\n");
+
+        for (model.Process p : config.getProcessList()) {
+            logTextArea.append("Processo:\n");
+            // Usa reflexão para listar getters/isers disponíveis
+            java.lang.reflect.Method[] methods = p.getClass().getMethods();
+            for (java.lang.reflect.Method m : methods) {
+            String name = m.getName();
+            // Seleciona métodos que representem propriedades: getXxx() ou isXxx(), exclui getClass()
+            if ((name.startsWith("get") && !name.equals("getClass")) || name.startsWith("is")) {
+                if (m.getParameterTypes().length != 0) continue; // pula métodos com parâmetros
+                String propName;
+                if (name.startsWith("get")) {
+                propName = name.substring(3);
+                } else {
+                propName = name.substring(2);
+                }
+                if (propName.length() == 0) continue;
+                propName = Character.toLowerCase(propName.charAt(0)) + propName.substring(1);
+
+                Object value;
+                try {
+                value = m.invoke(p);
+                } catch (Exception ex) {
+                value = "<erro ao obter>";
+                }
+                logTextArea.append("  " + propName + ": " + String.valueOf(value));
+            }
+            }
+            logTextArea.append("---------------------------\n");
+        }
         
         // Mantém apenas os últimos 1000 caracteres no log para não ficar muito pesado
         if (logTextArea.getText().length() > 1000) {
@@ -205,15 +244,24 @@ public class UIRunner extends JFrame {
     }
     
     private void updateGanttChart() {
-        // Simulação básica da atualização do Gantt Chart
-        ganttPanel.removeAll();
-        ganttPanel.setLayout(new BorderLayout());
-        
-        JLabel ganttLabel = new JLabel("Gantt Chart - Tempo: " + controller.getCurrentTime() + 
-                                      " | Algoritmo: " + config.getAlgorithmName(), JLabel.CENTER);
-        ganttLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        ganttPanel.add(ganttLabel, BorderLayout.CENTER);
-        
+        // Gera PNG do Gantt e atualiza a JLabel com ImageIcon
+        try {
+            // Gera o PNG (inclui todos os processos configurados)
+            controller.getGanttChart().generateChartPNG("simulation_gantt.png", config.getProcessList());
+
+            ImageIcon icon = new ImageIcon("simulation_gantt.png");
+            // Escala para caber no painel mantendo proporção simples
+            int pw = ganttPanel.getWidth() > 0 ? ganttPanel.getWidth() : 800;
+            int ph = ganttPanel.getHeight() > 0 ? ganttPanel.getHeight() : 200;
+            Image img = icon.getImage();
+            Image scaled = img.getScaledInstance(pw, ph, Image.SCALE_SMOOTH);
+            ganttImageLabel.setIcon(new ImageIcon(scaled));
+            ganttImageLabel.setText("");
+        } catch (Exception ex) {
+            ganttImageLabel.setIcon(null);
+            ganttImageLabel.setText("Erro ao gerar/mostrar Gantt: " + ex.getMessage());
+            ex.printStackTrace();
+        }
         ganttPanel.revalidate();
         ganttPanel.repaint();
     }
