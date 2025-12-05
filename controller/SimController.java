@@ -64,7 +64,7 @@ public class SimController {
 
             // Detecta troca de processo
             if (previousProcessId != null && !previousProcessId.equals(currentProcessId)) {
-                ganttChart.addCustomEvent(previousProcessId, lastStartTime, time, "running");
+                ganttChart.recordExecution(previousProcessId, lastStartTime, time);
                 lastStartTime = time;
             } else if (previousProcessId == null && currentProcessId != null) {
                 lastStartTime = time;
@@ -87,6 +87,13 @@ public class SimController {
                 p.executeTick();
             } else {
                 p.waitTick();
+                // registra tempo de espera no Gantt (intervalo [time, time+1))
+                try {
+                    ganttChart.recordWait(String.valueOf(p.getId()), time, time + 1);
+                } catch (Exception ex) {
+                    // não interrompe a simulação por problema no Gantt
+                    ex.printStackTrace();
+                }
             }
         }
 
@@ -100,7 +107,7 @@ public class SimController {
 
             // Se terminou agora, registra no Gantt
             if (currentProcess.isCompleted()) {
-                ganttChart.addCustomEvent(currentProcess.getId(), lastStartTime, time + 1, "terminated");
+                ganttChart.recordExecution(currentProcess.getId(), lastStartTime, time + 1);
                 lastStartTime = time + 1;
                 currentProcess = null;
             }
@@ -116,7 +123,7 @@ public class SimController {
             stop();
         }
 
-        lastProcessId = currentProcessId;
+        lastProcessId = currentProcess != null ? currentProcess.getId() : null;
     }
 
     public void start() {
@@ -130,12 +137,13 @@ public class SimController {
         int finalTime = clock.getCurrentTime();
       
         if (lastProcessId != null && currentProcess != null && !currentProcess.isCompleted()) {
-            ganttChart.addCustomEvent(lastProcessId, lastStartTime, finalTime, "running");
+            ganttChart.recordExecution(lastProcessId, lastStartTime, finalTime);
         }
         
         // Encerra a simulação e gera Gantt
         clock.stop();
-        ganttChart.generateGanttChart("simulation_gantt.svg");
+        // Gera o Gantt incluindo todos os processos da configuração para garantir linhas mesmo sem execução
+        ganttChart.generateChart("simulation_gantt.svg", config.getProcessList());
         System.out.println("Simulação encerrada em t=" + clock.getCurrentTime());
         System.out.println("Gantt gerado: simulation_gantt.svg");
     }
@@ -155,8 +163,13 @@ public class SimController {
         return clock.getCurrentTime();
     }
 
+    public SimulationConfig getConfig() {
+        return config;
+    }
+
     public GanttChart getGanttChart() {
         return ganttChart;
+    }
     /**
      * Indicates whether the simulation has finished. Safe to call from other threads.
      */
@@ -167,6 +180,7 @@ public class SimController {
     public static void main(String[] args) throws Exception {
         // Cria o parser e carrega configuração
         ConfigParser parser = new ConfigParser();
+        view.UIConfigurator.main(args);
         SimulationConfig config = parser.parse("config/test.txt");
 
         // Inicia o controlador de simulação a depender do modo de execução
@@ -179,11 +193,13 @@ public class SimController {
         } else {
             System.out.println("Rodando em modo passo a passo.");
             SimController controller = new SimController(new SystemClock(0), config);
-            while (!controller.isFinished()) {
-                System.out.print("Pressione Enter para avançar...");
-                new java.util.Scanner(System.in).nextLine();
-                controller.step();
-                Thread.sleep(50); 
+            try (java.util.Scanner scanner = new java.util.Scanner(System.in)) {
+                while (!controller.isFinished()) {
+                    System.out.print("Pressione Enter para avançar...");
+                    scanner.nextLine();
+                    controller.step();
+                    Thread.sleep(50);
+                }
             }
             controller.stop();
         }

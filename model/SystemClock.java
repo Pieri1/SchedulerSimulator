@@ -63,9 +63,7 @@ public class SystemClock {
     }
 
     public void tick() {
-        currentTime++;
-
-        // Notifica os listeners
+        // Notifica os listeners com o tempo atual primeiro (permite que t=0 seja processado)
         List<Runnable> snapshot;
         synchronized (listeners) {
             snapshot = new ArrayList<>(listeners);
@@ -78,6 +76,9 @@ public class SystemClock {
                 t.printStackTrace();
             }
         }
+
+        // Depois de notificar, incrementa o tempo para o próximo tick
+        currentTime++;
     }
 
     public synchronized void reset() {
