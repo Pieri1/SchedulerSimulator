@@ -41,7 +41,8 @@ public class ConfigParser {
                 // Faz atribuição dos valores de cada processo
                 Process p = new Process();
                 p.setId(parts[0].trim());
-                p.setColor(Integer.parseInt(parts[1].trim()));
+                // color in config is hex without '#', store as-is in Process
+                p.setColor(parts[1].trim());
                 p.setStartTime(Integer.parseInt(parts[2].trim()));
                 p.setDuration(Integer.parseInt(parts[3].trim()));
                 p.setPriority(Integer.parseInt(parts[4].trim()));

@@ -160,14 +160,36 @@ public class GanttChart {
             row++;
         }
 
-        // Atribui cores distintas de forma determinística por linha (evita cores repetidas)
+        // Mapeia cores a partir do atributo getColor() dos processos, se disponível
+        processColors.clear();
+        if (processList != null) {
+            for (model.Process p : processList) {
+                if (p == null) continue;
+                String pid = String.valueOf(p.getId());
+                String colorHex = null;
+                try {
+                    colorHex = String.valueOf(p.getColor());
+                } catch (Exception ignored) {}
+                if (colorHex != null && !colorHex.isEmpty()) {
+                    // normaliza: adiciona '#' se faltar e garante 6 dígitos
+                    String normalized = colorHex.trim();
+                    if (!normalized.startsWith("#")) normalized = "#" + normalized;
+                    if (normalized.length() == 7) {
+                        processColors.put(pid, normalized);
+                    }
+                }
+            }
+        }
+        // Fallback: atribui cores geradas para quaisquer processos sem cor definida
         int totalProcesses = Math.max(1, processRows.size());
-        for (Map.Entry<String, Integer> e : processRows.entrySet()) {
-            int idx = e.getValue();
-            float hue = idx / (float) totalProcesses; // espaçamento uniforme
-            java.awt.Color c = java.awt.Color.getHSBColor(hue, 0.65f, 0.9f);
-            String hex = String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue());
-            processColors.put(e.getKey(), hex);
+        int idxCounter = 0;
+        for (String pid : processRows.keySet()) {
+            if (!processColors.containsKey(pid)) {
+                float hue = (idxCounter++) / (float) totalProcesses;
+                java.awt.Color c = java.awt.Color.getHSBColor(hue, 0.65f, 0.9f);
+                String hex = String.format("#%02x%02x%02x", c.getRed(), c.getGreen(), c.getBlue());
+                processColors.put(pid, hex);
+            }
         }
         
         // Grade de tempo

@@ -6,7 +6,7 @@ import java.util.List;
 public class Process {
     // Atributos de processo
     private String id;
-    private int color;
+    private String color; // RGB hex string like "FFAA00" (no leading #)
     private int startTime;
     private int duration;
     private int priority;
@@ -32,8 +32,8 @@ public class Process {
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
-    public int getColor() { return color; }
-    public void setColor(int color) { this.color = color; }
+    public String getColor() { return color; }
+    public void setColor(String color) { this.color = color; }
 
     public int getStartTime() { return startTime; }
     public void setStartTime(int startTime) { this.startTime = startTime; }
@@ -90,7 +90,7 @@ public class Process {
 
     @Override
     public String toString() {
-        return String.format("Process %s [start=%d, duration=%d, priority=%d, state=%s]",
-                id, startTime, duration, priority, state);
+        return String.format("Process %s [color=%s, start=%d, duration=%d, priority=%d, state=%s]",
+            id, color, startTime, duration, priority, state);
     }
 }
