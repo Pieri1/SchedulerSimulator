@@ -42,6 +42,11 @@ public class SimController {
         }
         scheduler = chosen;
 
+        // Se for PRIOPEnv, injeta alpha da configuração
+        if (scheduler instanceof PRIOPEnv) {
+            ((PRIOPEnv) scheduler).setAlpha(config.getAlpha());
+        }
+
         // Assina os ticks do clock
         clock.addListener(this::onTick);
     }
@@ -56,8 +61,15 @@ public class SimController {
             quantumCounter >= config.getQuantum()) {
 
             model.Process previousProcess = currentProcess;
-            currentProcess = scheduler.nextProcess(config.getProcessList(), time);
-            quantumCounter = 0;
+            currentProcess = scheduler.nextProcess(config.getProcessList(), time, previousProcess);
+            if (scheduler.wasRandomTieBreak()) {
+                try {
+                    ganttChart.recordRandomTie(time, "sorteio");
+                } catch (Exception ignore) {}
+            }
+            if (quantumCounter >= config.getQuantum()) {
+                quantumCounter = 0;
+            }
 
             // IDs para Gantt
             String previousProcessId = (previousProcess != null) ? previousProcess.getId() : null;

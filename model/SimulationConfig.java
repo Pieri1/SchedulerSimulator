@@ -8,6 +8,7 @@ public class SimulationConfig {
     private String algorithmName;
     private int quantum;
     private int runMode = 1; // 0 = step-by-step, 1 = automático
+    private int alpha = 1; // parâmetro opcional (default = 1)
     private final List<Process> processList;
 
     public SimulationConfig() {
@@ -23,6 +24,9 @@ public class SimulationConfig {
 
     public int getRunMode() { return runMode; }
     public void setRunMode(int runMode) { this.runMode = runMode; }
+
+    public int getAlpha() { return alpha; }
+    public void setAlpha(int alpha) { this.alpha = alpha; }
 
     public List<Process> getProcessList() { return processList; }
 }

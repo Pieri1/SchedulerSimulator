@@ -162,7 +162,8 @@ public class UIConfigurator extends JFrame {
         StringBuilder sb = new StringBuilder();
         sb.append("=== CONFIGURAÇÃO DA SIMULAÇÃO ===\n\n");
         sb.append("Algoritmo: ").append(currentConfig.getAlgorithmName()).append("\n");
-        sb.append("Quantum: ").append(currentConfig.getQuantum()).append("\n\n");
+        sb.append("Quantum: ").append(currentConfig.getQuantum()).append("\n");
+        sb.append("Alpha: ").append(currentConfig.getAlpha()).append("\n\n");
         sb.append("=== PROCESSOS ===\n");
         
         if (currentConfig.getProcessList().isEmpty()) {
@@ -230,14 +231,14 @@ public class UIConfigurator extends JFrame {
             // Se não conseguir carregar do arquivo, cria processos manualmente
             model.Process p1 = new model.Process();
             p1.setId("P1");
-            p1.setColor(1);
+            p1.setColor("FF6B6B");
             p1.setStartTime(0);
             p1.setDuration(5);
             p1.setPriority(1);
             
             model.Process p2 = new model.Process();
             p2.setId("P2");
-            p2.setColor(2);
+            p2.setColor("4ECDC4");
             p2.setStartTime(2);
             p2.setDuration(3);
             p2.setPriority(2);

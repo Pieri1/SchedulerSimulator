@@ -77,7 +77,6 @@ public class SystemClock {
             }
         }
 
-        // Depois de notificar, incrementa o tempo para o próximo tick
         currentTime++;
     }
 

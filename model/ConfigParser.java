@@ -19,13 +19,24 @@ public class ConfigParser {
 
             // Exemplo:  "PRIOP;5"
             String[] headerParts = line.split(";");
-            if (headerParts.length < 2) {
+            if (headerParts.length < 2 || headerParts.length > 3) {
                 throw new IOException("Formato de configuração inválido.");
             }
 
             // Faz atribuição dos valores do cabeçalho
             config.setAlgorithmName(headerParts[0].trim());
             config.setQuantum(Integer.parseInt(headerParts[1].trim()));
+            // alpha opcional na posição 3 (se existir)
+            if (headerParts.length == 3 && headerParts[2] != null && !headerParts[2].trim().isEmpty()) {
+                try {
+                    config.setAlpha(Integer.parseInt(headerParts[2].trim()));
+                } catch (NumberFormatException nfe) {
+                    // mantém default = 1 se inválido
+                    config.setAlpha(1);
+                }
+            } else {
+                config.setAlpha(1);
+            }
 
             // Pega os processos (A partir da segunda linha)
             while ((line = reader.readLine()) != null) {

@@ -18,10 +18,12 @@ import javax.imageio.ImageIO;
 public class GanttChart {
     private List<GanttEvent> events;
     private Map<String, String> processColors;
+    private List<Marker> markers;
     
     public GanttChart() {
         this.events = new ArrayList<>();
         this.processColors = new HashMap<>();
+        this.markers = new ArrayList<>();
     }
     
     /**
@@ -111,6 +113,10 @@ public class GanttChart {
                 .mapToInt(e -> (int) e.endTime)
                 .max()
                 .orElse(10);
+        // Considera também marcadores (sorteio)
+        for (Marker m : markers) {
+            if (m.time > maxTime) maxTime = m.time;
+        }
         
         // Coleta processos únicos
         Set<String> processes = new TreeSet<>();
@@ -244,6 +250,16 @@ public class GanttChart {
             out.printf("<title>%s: %.1f-%.1f (duraçao: %.1f)</title>\n",
                       event.processId, event.startTime, event.endTime, event.endTime - event.startTime);
         }
+
+        // Marcadores de sorteio (ícones no topo do gráfico)
+        for (Marker m : markers) {
+            int x = margin + (int)((m.time * chartWidth) / Math.max(1, maxTime));
+            int y = margin - 28;
+            String label = (m.label == null || m.label.isEmpty()) ? "R" : m.label;
+            out.printf("<circle cx=\"%d\" cy=\"%d\" r=\"6\" fill=\"#e74c3c\" stroke=\"black\" stroke-width=\"1\"/>\n", x, y);
+            out.printf("<text x=\"%d\" y=\"%d\" text-anchor=\"middle\" font-size=\"9\" fill=\"white\" font-weight=\"bold\">%s</text>\n", x, y+3, label);
+            out.printf("<title>Sorteio de desempate em t=%d</title>\n", m.time);
+        }
         
         // Rodapé
         out.printf("<text x=\"%d\" y=\"%d\" text-anchor=\"middle\" font-size=\"12\" fill=\"#666\">Tempo total: %d | Processos: %d | Eventos: %d</text>\n",
@@ -280,6 +296,9 @@ public class GanttChart {
                 .mapToInt(e -> (int) e.endTime)
                 .max()
                 .orElse(10);
+        for (Marker m : markers) {
+            if (m.time > maxTime) maxTime = m.time;
+        }
 
         // Coleta processos únicos
         java.util.Set<String> processes = new java.util.TreeSet<>();
@@ -394,6 +413,23 @@ public class GanttChart {
             g.setColor(new Color(0x66,0x66,0x66));
             g.drawString(footer, (width - fw)/2, height - 20);
 
+            // Marcadores de sorteio no topo
+            for (Marker m : markers) {
+                int x = margin + (int)((m.time * chartWidth) / Math.max(1, maxTime));
+                int y = margin - 28;
+                g.setColor(new Color(0xE7,0x4C,0x3C));
+                g.fillOval(x - 6, y - 6, 12, 12);
+                g.setColor(Color.BLACK);
+                g.drawOval(x - 6, y - 6, 12, 12);
+                g.setColor(Color.WHITE);
+                String lbl = (m.label == null || m.label.isEmpty()) ? "R" : m.label;
+                Font old = g.getFont();
+                g.setFont(new Font("SansSerif", Font.BOLD, 9));
+                int tw = g.getFontMetrics().stringWidth(lbl);
+                g.drawString(lbl, x - tw/2, y + 3);
+                g.setFont(old);
+            }
+
         } finally {
             g.dispose();
         }
@@ -405,6 +441,7 @@ public class GanttChart {
     public void clear() {
         events.clear();
         processColors.clear();
+        markers.clear();
     }
     
     public List<GanttEvent> getEvents() {
@@ -430,5 +467,20 @@ public class GanttChart {
             return String.format("%s: %.1f-%.1f (dur: %.1f)", 
                                processId, startTime, endTime, endTime - startTime);
         }
+    }
+
+    // Marcador de eventos especiais (ex.: sorteio de desempate)
+    public static class Marker {
+        public int time;
+        public String label;
+        public Marker(int time, String label) { this.time = time; this.label = label; }
+    }
+
+    /**
+     * Registra um marcador de sorteio de desempate em um instante de tempo.
+     * A label é curta, ex.: "R".
+     */
+    public void recordRandomTie(int time, String label) {
+        markers.add(new Marker(time, label));
     }
 }
